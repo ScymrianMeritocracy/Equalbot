@@ -1,0 +1,11 @@
+%YAML 1.1
+---
+username: "YOURMODACCT"
+password: "TOPSECRET"
+# https://github.com/reddit/reddit/wiki/API#rules
+useragent: "Equalbot_v0.1 by (/u/YOURUSERNAME)"
+subs:
+  - "YOURSUBREDDIT"
+count: 5 # number of posts allowed per...
+hours: 20 # this time period
+comment: "Hello. Yes, this is bot. As you know, all are equal in /r/YOURSUBREDDIT, including submitters, and that is the reason for rule six.\n\nThis submission was removed to give others equal opportunity to post. Please [message the moderators](http://www.reddit.com/message/compose?to=/r/YOURSUBREDDIT&subject=rule%206%20removal%20mistake) with a link to the submission if I am in error."
