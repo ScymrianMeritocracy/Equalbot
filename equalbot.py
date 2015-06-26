@@ -36,6 +36,17 @@ def sortposts(posts):
             counts[post.author.name] = [post.id]
     return counts
 
+def remoteconf(sub):
+    """Return parsed remote config for a subreddit."""
+    try:
+        page = r.get_wiki_page(sub, "equalbot")
+        rconf = yaml.safe_load(page.content_md)
+    except:
+        print(sub + ": trouble parsing wiki page")
+        return None
+    if "count" in rconf and "hours" in rconf:
+        return rconf
+
 def remove(posts, r):
     """Remove list of submissions."""
     for post in posts:
@@ -62,9 +73,13 @@ if __name__ == "__main__":
 
     # check and change our list of subreddits
     for sub in conf["subs"]:
+        rconf = remoteconf(sub)
+        if not rconf:
+            continue
         rsub = r.get_subreddit(sub)
-        submissions = getposts(rsub, conf)
+        submissions = getposts(rsub, rconf)
         userposts = sortposts(submissions)
-        violations = countposts(userposts, conf)
+        violations = countposts(userposts, rconf)
         remove(violations, r)
-        warn(violations, r, conf)
+        if "comment" in rconf:
+            warn(violations, r, rconf)
