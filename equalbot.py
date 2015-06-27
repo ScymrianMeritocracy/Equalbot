@@ -1,7 +1,9 @@
 #!/usr/bin/python
 
+import fcntl
 import os
 import praw
+import sys
 import time
 import yaml
 
@@ -61,10 +63,14 @@ def warn(posts, r, conf):
 
 if __name__ == "__main__":
     # load configuration options from file beside ourself
+    # also, don't run if we are
     mypath = os.path.dirname(os.path.realpath(__file__))
     myconf = open(mypath + "/equalconf.yaml", "r")
+    try:
+        fcntl.flock(myconf, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except:
+        sys.exit(1)
     conf = yaml.safe_load(myconf)
-    myconf.close()
 
     # connect to reddit
     r = praw.Reddit(user_agent=conf["useragent"])
