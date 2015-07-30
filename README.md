@@ -22,7 +22,7 @@ If `comment` is excluded, the equalbot will operate silently.
 
 It is recommended that editing of the wiki page be very restricted. Note that the account used must be a moderator with post and wiki privileges in the sub(s) given.
 
-The equalbot optionally supports PRAW's `praw-multiprocess` program. Set `multiprocess` to `true` in the configuration to enable this functionality.
+The equalbot optionally supports PRAW's [praw-multiprocess](http://praw.readthedocs.org/en/latest/pages/multiprocess.html) program. Set `multiprocess` to `true` in the configuration to enable this functionality.
 
 Usage
 -----
