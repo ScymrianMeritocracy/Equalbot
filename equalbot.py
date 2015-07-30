@@ -30,7 +30,7 @@ def sortposts(posts):
     """Sort submissions by user."""
     counts = {}
     for post in posts:
-        if counts.has_key(post.author.name):
+        if post.author.name in counts.keys():
             counts[post.author.name].append(post.id)
         else:
             counts[post.author.name] = [post.id]
@@ -67,7 +67,11 @@ if __name__ == "__main__":
     myconf.close()
 
     # connect to reddit
-    r = praw.Reddit(user_agent=conf["useragent"])
+    if conf["multiprocess"]:
+        myhandler = praw.handlers.MultiprocessHandler()
+    else:
+        myhandler = None
+    r = praw.Reddit(user_agent=conf["useragent"], handler=myhandler)
     r.config.decode_html_entities = True
     r.login(username=conf["username"], password=conf["password"])
 
