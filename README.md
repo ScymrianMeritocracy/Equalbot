@@ -6,13 +6,13 @@ The equalbot is a simple reddit bot for setting a per user submission count limi
 Requirements
 ------------
 
- * [PRAW](https://praw.readthedocs.org/)
+ * [PRAW4](https://praw.readthedocs.io/en/praw4/index.html)
  * [PyYAML](http://pyyaml.org/)
 
 Setup
 -----
 
-Copy the example configuration to a file called `equalconf.yaml` (which is expected to be in the same directory as the bot), and edit at least the stuff in caps to suit your needs. Then create a wiki page at `/r/YOURSUBREDDIT/wiki/equalbot` and define subreddit-specific settings as YAML, just like for AutoModerator.
+Copy the example configurations to a files called `praw.ini` and `sublist.yaml` (which are expected to be in the same directory as the bot), and edit at least the stuff in caps to suit your needs. Note that the `client_id` and `client_secret` values are obtained in your [account preferences](https://github.com/reddit/reddit/wiki/OAuth2-Quick-Start-Example#first-steps). Then create a wiki page at `/r/YOURSUBREDDIT/wiki/equalbot` and define subreddit-specific settings as YAML, just like for AutoModerator.
 
     count: 5 # number of posts allowed per...
     hours: 20 # this time period
@@ -21,8 +21,6 @@ Copy the example configuration to a file called `equalconf.yaml` (which is expec
 If `comment` is excluded, the equalbot will operate silently.
 
 It is recommended that editing of the wiki page be very restricted. Note that the account used must be a moderator with post and wiki privileges in the sub(s) given.
-
-The equalbot optionally supports PRAW's [praw-multiprocess](http://praw.readthedocs.org/en/latest/pages/multiprocess.html) program. Set `multiprocess` to `true` in the configuration to enable this functionality.
 
 Usage
 -----

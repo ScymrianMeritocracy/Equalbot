@@ -1,9 +1,0 @@
-%YAML 1.1
----
-username: "YOURMODACCT"
-password: "TOPSECRET"
-# https://github.com/reddit/reddit/wiki/API#rules
-useragent: "Equalbot_v0.2 by (/u/YOURUSERNAME)"
-multiprocess: false
-subs:
-  - "YOURSUBREDDIT"

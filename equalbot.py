@@ -5,7 +5,7 @@ import praw
 import time
 import yaml
 
-def countposts(posts, conf):
+def countposts(conf, posts):
     """Return submissions over our limit."""
     naughty = []
     for user in posts:
@@ -13,12 +13,12 @@ def countposts(posts, conf):
             naughty.append(posts[user].pop(0))
     return naughty
 
-def getposts(rsub, conf):
+def getposts(r, sub, conf):
     """Fetch all submissions posted within our timeframe."""
     myposts = []
     mynow = int(time.time())
     seconds = conf["hours"] * 60 * 60
-    allposts = rsub.get_new(limit = 0)
+    allposts = r.subreddit(sub).new()
     for post in allposts:
         if (mynow - post.created_utc) > seconds:
             break
@@ -31,15 +31,15 @@ def sortposts(posts):
     counts = {}
     for post in posts:
         if post.author.name in counts.keys():
-            counts[post.author.name].append(post.id)
+            counts[post.author.name].append(post)
         else:
-            counts[post.author.name] = [post.id]
+            counts[post.author.name] = [post]
     return counts
 
-def remoteconf(sub):
+def remoteconf(r, sub):
     """Return parsed remote config for a subreddit."""
     try:
-        page = r.get_wiki_page(sub, "equalbot")
+        page = r.subreddit(sub).wiki['equalbot']
         rconf = yaml.safe_load(page.content_md)
     except:
         print(sub + ": trouble parsing wiki page")
@@ -47,43 +47,35 @@ def remoteconf(sub):
     if "count" in rconf and "hours" in rconf:
         return rconf
 
-def remove(posts, r):
+def remove(r, posts):
     """Remove list of submissions."""
     for post in posts:
-        r.get_submission(submission_id = post).remove()
+        r.subreddit(str(post.subreddit)).mod.remove(post)
 
-def warn(posts, r, conf):
+def warn(r, conf, posts):
     """Post comments explaining why we removed the submission."""
     for post in posts:
-        mypost = r.get_submission(submission_id = post)
-        comment = mypost.add_comment(conf["comment"])
-        comment.distinguish()
+        comment = post.reply(conf["comment"])
+        r.subreddit(str(post.subreddit)).mod.distinguish(comment)
 
 if __name__ == "__main__":
-    # load configuration options from file beside ourself
+    # load subreddit list from file beside ourself
     mypath = os.path.dirname(os.path.realpath(__file__))
-    myconf = open(mypath + "/equalconf.yaml", "r")
+    myconf = open(mypath + "/sublist.yaml", "r")
     conf = yaml.safe_load(myconf)
     myconf.close()
 
     # connect to reddit
-    if conf["multiprocess"]:
-        myhandler = praw.handlers.MultiprocessHandler()
-    else:
-        myhandler = None
-    r = praw.Reddit(user_agent=conf["useragent"], handler=myhandler)
-    r.config.decode_html_entities = True
-    r.login(username=conf["username"], password=conf["password"])
+    r = praw.Reddit()
 
     # check and change our list of subreddits
     for sub in conf["subs"]:
-        rconf = remoteconf(sub)
+        rconf = remoteconf(r, sub)
         if not rconf:
             continue
-        rsub = r.get_subreddit(sub)
-        submissions = getposts(rsub, rconf)
+        submissions = getposts(r, sub, rconf)
         userposts = sortposts(submissions)
-        violations = countposts(userposts, rconf)
-        remove(violations, r)
+        violations = countposts(rconf, userposts)
+        remove(r, violations)
         if "comment" in rconf:
-            warn(violations, r, rconf)
+            warn(r, rconf, violations)
