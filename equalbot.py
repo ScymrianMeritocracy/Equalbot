@@ -36,10 +36,10 @@ def sortposts(posts):
             counts[post.author.name] = [post.id]
     return counts
 
-def remoteconf(sub):
+def remoteconf(r, sub):
     """Return parsed remote config for a subreddit."""
     try:
-        page = r.get_wiki_page(sub, "equalbot")
+        page = r.subreddit(sub).wiki['equalbot']
         rconf = yaml.safe_load(page.content_md)
     except:
         print(sub + ": trouble parsing wiki page")
@@ -71,7 +71,7 @@ if __name__ == "__main__":
 
     # check and change our list of subreddits
     for sub in conf["subs"]:
-        rconf = remoteconf(sub)
+        rconf = remoteconf(r, sub)
         if not rconf:
             continue
         rsub = r.get_subreddit(sub)
