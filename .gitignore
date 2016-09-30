@@ -2,5 +2,6 @@
 *~
 *.swp
 
-# the legit config
-equalconf.yaml
+# the legit configs
+praw.ini
+sublist.yaml
