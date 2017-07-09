@@ -3,7 +3,7 @@
 import os
 import praw
 import time
-import yaml
+import ruamel.yaml
 
 def countposts(conf, posts):
     """Return submissions over our limit."""
@@ -40,7 +40,7 @@ def remoteconf(r, sub):
     """Return parsed remote config for a subreddit."""
     try:
         page = r.subreddit(sub).wiki['equalbot']
-        rconf = yaml.safe_load(page.content_md)
+        rconf = ruamel.yaml.safe_load(page.content_md)
     except:
         print(sub + ": trouble parsing wiki page")
         return None
@@ -62,7 +62,7 @@ if __name__ == "__main__":
     # load subreddit list from file beside ourself
     mypath = os.path.dirname(os.path.realpath(__file__))
     myconf = open(mypath + "/sublist.yaml", "r")
-    conf = yaml.safe_load(myconf)
+    conf = ruamel.yaml.safe_load(myconf)
     myconf.close()
 
     # connect to reddit
