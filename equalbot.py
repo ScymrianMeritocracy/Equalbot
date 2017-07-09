@@ -50,13 +50,13 @@ def remoteconf(r, sub):
 def remove(r, posts):
     """Remove list of submissions."""
     for post in posts:
-        r.subreddit(str(post.subreddit)).mod.remove(post)
+        post.mod.remove()
 
 def warn(r, conf, posts):
     """Post comments explaining why we removed the submission."""
     for post in posts:
         comment = post.reply(conf["comment"])
-        r.subreddit(str(post.subreddit)).mod.distinguish(comment)
+        comment.mod.distinguish()
 
 if __name__ == "__main__":
     # load subreddit list from file beside ourself
