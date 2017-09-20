@@ -1,7 +1,7 @@
 Equalbot
 ========
 
-The equalbot is a simple reddit bot for setting a per user submission count limit in a subreddit. If an account goes over, the equalbot removes posts (newest first) until it is back at the limit. A comment can be left on removed posts so the submitter knows why this happened.
+The equalbot is a simple reddit bot for setting a per user submission count limit in a subreddit. If an account goes over, the equalbot removes posts (newest first) until it is back at the limit. A comment can be left on removed posts so the submitter knows why this happened. Stickied posts are currently excluded from the count.
 
 Requirements
 ------------

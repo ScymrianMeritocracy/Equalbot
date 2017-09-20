@@ -22,6 +22,8 @@ def getposts(r, sub, conf):
     for post in allposts:
         if (mynow - post.created_utc) > seconds:
             break
+        elif post.stickied:
+            continue
         else:
             myposts.append(post)
     return myposts
